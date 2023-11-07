@@ -1008,7 +1008,7 @@ all reachable through 'M-x customize', in group 'Emacs.Editing.I18n.Po'."
   (set (make-local-variable 'font-lock-defaults) '(po-font-lock-keywords t))
 
   (set (make-local-variable 'po-read-only) buffer-read-only)
-  (setq buffer-read-only t)
+  ;; (setq buffer-read-only t)
 
   (make-local-variable 'po-start-of-entry)
   (make-local-variable 'po-start-of-msgctxt)
@@ -1045,7 +1045,7 @@ all reachable through 'M-x customize', in group 'Emacs.Editing.I18n.Po'."
   (set (make-local-variable 'po-string-end) nil)
   (set (make-local-variable 'po-marking-overlay) (po-create-overlay))
 
-  (add-hook 'write-contents-hooks 'po-replace-revision-date)
+  ;; (add-hook 'write-contents-hooks 'po-replace-revision-date)
 
   (run-hooks 'po-mode-hook)
   (message (_"You may type 'h' or '?' for a short PO mode reminder.")))

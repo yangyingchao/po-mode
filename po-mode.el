@@ -921,73 +921,9 @@ M-S  Ignore path          M-A  Ignore PO file      *M-L  Ignore lexicon
   "Abbrev table used while in PO mode.")
 (define-abbrev-table 'po-mode-abbrev-table ())
 
-(defvar po-mode-map
-  ;; Use (make-keymap) because (make-sparse-keymap) does not work on Demacs.
-  (let ((po-mode-map (make-keymap)))
-    (suppress-keymap po-mode-map)
-    (define-key po-mode-map "\C-i" 'po-unfuzzy)
-    (define-key po-mode-map "\C-j" 'po-msgid-to-msgstr)
-    (define-key po-mode-map "\C-m" 'po-edit-msgstr)
-    (define-key po-mode-map " " 'po-auto-select-entry)
-    (define-key po-mode-map "?" 'po-help)
-    (define-key po-mode-map "#" 'po-edit-comment)
-    (define-key po-mode-map "," 'po-tags-search)
-    (define-key po-mode-map "." 'po-current-entry)
-    (define-key po-mode-map "<" 'po-first-entry)
-    (define-key po-mode-map "=" 'po-statistics)
-    (define-key po-mode-map ">" 'po-last-entry)
-    (define-key po-mode-map "a" 'po-cycle-auxiliary)
-;;;;  (define-key po-mode-map "c" 'po-save-entry)
-    (define-key po-mode-map "f" 'po-next-fuzzy-entry)
-    (define-key po-mode-map "h" 'po-help)
-    (define-key po-mode-map "k" 'po-kill-msgstr)
-;;;;  (define-key po-mode-map "l" 'po-lookup-lexicons)
-    (define-key po-mode-map "m" 'po-push-location)
-    (define-key po-mode-map "n" 'po-next-entry)
-    (define-key po-mode-map "o" 'po-next-obsolete-entry)
-    (define-key po-mode-map "p" 'po-previous-entry)
-    (define-key po-mode-map "q" 'po-confirm-and-quit)
-    (define-key po-mode-map "r" 'po-pop-location)
-    (define-key po-mode-map "s" 'po-cycle-source-reference)
-    (define-key po-mode-map "t" 'po-next-translated-entry)
-    (define-key po-mode-map "u" 'po-next-untranslated-entry)
-    (define-key po-mode-map "v" 'po-mode-version)
-    (define-key po-mode-map "w" 'po-kill-ring-save-msgstr)
-    (define-key po-mode-map "x" 'po-exchange-location)
-    (define-key po-mode-map "y" 'po-yank-msgstr)
-    (define-key po-mode-map "A" 'po-consider-as-auxiliary)
-    (define-key po-mode-map "E" 'po-edit-out-full)
-    (define-key po-mode-map "F" 'po-previous-fuzzy-entry)
-    (define-key po-mode-map "K" 'po-kill-comment)
-;;;;  (define-key po-mode-map "L" 'po-consider-lexicon-file)
-    (define-key po-mode-map "M" 'po-send-mail)
-    (define-key po-mode-map "O" 'po-previous-obsolete-entry)
-    (define-key po-mode-map "T" 'po-previous-translated-entry)
-    (define-key po-mode-map "U" 'po-previous-untranslated-entry)
-    (define-key po-mode-map "Q" 'po-quit)
-    (define-key po-mode-map "S" 'po-consider-source-path)
-    (define-key po-mode-map "V" 'po-validate)
-    (define-key po-mode-map "W" 'po-kill-ring-save-comment)
-    (define-key po-mode-map "Y" 'po-yank-comment)
-    (define-key po-mode-map "_" 'po-undo)
-    (define-key po-mode-map "\C-_" 'po-undo)
-    (define-key po-mode-map "\C-xu" 'po-undo)
-    (define-key po-mode-map "0" 'po-other-window)
-    (define-key po-mode-map "\177" 'po-fade-out-entry)
-    (define-key po-mode-map "\C-c\C-a" 'po-select-auxiliary)
-    (define-key po-mode-map "\C-c\C-e" 'po-edit-msgstr-and-ediff)
-    (define-key po-mode-map [?\C-c?\C-#] 'po-edit-comment-and-ediff)
-    (define-key po-mode-map "\C-c\C-C" 'po-edit-comment-and-ediff)
-    (define-key po-mode-map "\M-," 'po-mark-translatable)
-    (define-key po-mode-map "\M-." 'po-select-mark-and-mark)
-;;;;  (define-key po-mode-map "\M-c" 'po-select-and-save-entry)
-;;;;  (define-key po-mode-map "\M-l" 'po-edit-lexicon-entry)
-    (define-key po-mode-map "\M-s" 'po-select-source-reference)
-    (define-key po-mode-map "\M-A" 'po-ignore-as-auxiliary)
-;;;;  (define-key po-mode-map "\M-L" 'po-ignore-lexicon-file)
-    (define-key po-mode-map "\M-S" 'po-ignore-source-path)
-    po-mode-map)
-  "Keymap for PO mode.")
+(defvar-keymap po-mode-map
+  :doc "Keymap for po-mode."
+  "C-<return>" #'po-insert-new-entry)
 
 ;;;###autoload
 (defun po-mode ()
@@ -1047,8 +983,7 @@ all reachable through 'M-x customize', in group 'Emacs.Editing.I18n.Po'."
 
   ;; (add-hook 'write-contents-hooks 'po-replace-revision-date)
 
-  (run-hooks 'po-mode-hook)
-  (message (_"You may type 'h' or '?' for a short PO mode reminder.")))
+  (run-hooks 'po-mode-hook))
 
 (defvar po-subedit-mode-map
   ;; Use (make-keymap) because (make-sparse-keymap) does not work on Demacs.
@@ -2511,6 +2446,11 @@ without moving its cursor."
                 po-search-path))
   (setq po-reference-check 0)
   (po-show-source-path))
+
+(defun po-insert-new-entry ()
+  "Insert new entry."
+  (interactive)
+  (insert "msgid \"\"\nmsgstr \"\"\n"))
 
 (defun po-ensure-source-references ()
   "Extract all references into a list, with paths resolved, if necessary."
